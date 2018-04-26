@@ -209,15 +209,25 @@ def encode_letter(data):
         if parts[i].lstrip('\t').startswith("Date"):
             date = parts[i].lstrip('\t')
         elif parts[i].lstrip('\t').startswith("From:"):
-            sender, address = encode_sender(parts[i,i+2])
-        elif parts[i].lstrip('\t').startswith("To :"):
+            sender, address = encode_sender(parts[i:i+2])
+        elif parts[i].lstrip('\t').startswith("To:"):
             reciever = parts[i].lstrip('\t')
-        elif parts[i].lstrip('\t').startswith("To :"):
-            subject = encode_subject(parts[i,i+2])
-        else:
-            pass
-    print (date, sender, address,reciever,subject)
-    c = 0
+        elif parts[i].lstrip('\t').startswith("Subject:"):
+            subject = encode_subject(parts[i:i+2])
+        elif not parts[i]:
+            print (''.zfill(max(len(date)+2, len(sender+address)+3, len(reciever)+2,len(subject)+11)).replace('0','-'))
+            print('| {0}\n| {1} {2}\n| {3}\n| Subject: {4}'.format(date, sender, address, reciever, subject))
+            print(''.zfill(max(len(date) + 2, len(sender + address) + 3, len(reciever) + 2, len(subject) + 11)).replace('0', '-'))
+            # print ('Found text in '+ str(i) + ' line')
+            content = ''
+            for j in range (i+1,len(parts)):
+                if not parts[j]:
+                    content += '|\n'
+                elif parts[j] != '.':
+                    content += '| '+parts[j]+'\n'
+            print (content)
+            break
+
     pass
 
 
@@ -231,7 +241,7 @@ def show_letter(socket, choice):
             break
         data += raw_data
     encode_letter(data)
-    print (data)
+    # print (data)
 
 
 if __name__ == '__main__':
@@ -241,8 +251,8 @@ if __name__ == '__main__':
         socket = establlish_connection()
         auth_user(socket, ['USER ' + email, 'PASS ' + password])
         show_inbox(socket)
-        # choice = input('Enter letter number to open: ')
-        show_letter(socket, '3')
+        choice = input('Enter letter number to open: ')
+        show_letter(socket, choice)
     except AuthenticationError:
         print('Wrong login/password')
     finally:
