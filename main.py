@@ -22,10 +22,106 @@ def establlish_connection():
     # print(data.decode())
     return ssl_sock
 
+# ----1------
+#  =?UTF-8?B?0K/QvdC00LXQutGBLtCU0LXQvdGM0LPQuA==?= <inform@money.yandex.ru>
+# Sender: inform@money.yandex.ru
+# To: test.katy.solo@yandex.ru
+# Message-ID: <1803317348.93894.1524732159702.JavaMail.tomcat55@vostok1>
+# Subject: =?UTF-8?B?0KMg0LLQsNGBINC/0L7Rj9Cy0LjQu9GB0Y8g0LrQvtGI0LU=?=
+#  =?UTF-8?B?0LvRkdC6INCyINCv0L3QtNC10LrRgS7QlNC10L3RjNCz0LDRhQ==?=
+# MIME-Version: 1.0
+# ----2------
+#  =?utf-8?b?0JrQvtC80LDQvdC00LAg0K/QvdC00LXQutGBLtCU0LjRgdC60LA=?=
+#  <disk-news@yandex.ru>
+# To: test.katy.solo@yandex.ru
+# Date: Wed, 25 Apr 2018 18:21:31 +0300
+# List-ID: welcome
+# Return-Path: disk-news@yandex.ru
+# X-Yandex-Forward: 8b2a5c0e53d0aaaaa9907c487ff912c8
+# ----3------
+#  Katy Solo (test.katy.solo@yandex.ru)
+# To: test.katy.solo@yandex.ru
+# Subject: =?UTF-8?B?0JzQvtC1INGC0LXRgdGC0L7QstC+0LUg0L/QuNGB0YzQvNC+?=
+# Content-Type: text/plain; charset=utf-8
+# Return-Path: test.katy.solo@yandex.ru
+# X-Yandex-Forward: 8b2a5c0e53d0aaaaa9907c487ff912c8
+# X-Yandex-Forward: 638c42cf48857d61d95cd8c944a01674
+# ----4------
+#  Katy Solo (test.katy.solo@yandex.ru)
+# To: colo18@yandex.ru,test.katy.solo@yandex.ru
+# Subject: =?UTF-8?B?0JzQvtC1INGC0LXRgdGC0L7QstC+0LUg0L/QuNGB0YzQvNC+?=
+# Content-Type: text/plain; charset=utf-8
+# Return-Path: test.katy.solo@yandex.ru
+# X-Yandex-Forward: 8b2a5c0e53d0aaaaa9907c487ff912c8
+# X-Yandex-Forward: 638c42cf48857d61d95cd8c944a01674
+# ----5------
+#  Katy Solo (test.katy.solo@yandex.ru)
+# To: colo18@yandex.ru,test.katy.solo@yandex.ru
+# Subject: =?UTF-8?B?0JzQvtC1INGC0LXRgdGC0L7QstC+0LUg0L/QuNGB0YzQvNC+?=
+# Content-Type: text/plain; charset=utf-8
+# Return-Path: test.katy.solo@yandex.ru
+# X-Yandex-Forward: 8b2a5c0e53d0aaaaa9907c487ff912c8
+# X-Yandex-Forward: 638c42cf48857d61d95cd8c944a01674
+# ----6------
+#  Katy Solo (test.katy.solo@yandex.ru)
+# To: colo18@yandex.ru,test.katy.solo@yandex.ru
+# Subject: "=?UTF-8?B?0JzQvtC1INGC0LXRgdGC0L7QstC+0LUg0L/QuNGB0YzQvNC+?="
+# Content-Type: text/plain; charset=utf-8
+# Return-Path: test.katy.solo@yandex.ru
+# X-Yandex-Forward: 8b2a5c0e53d0aaaaa9907c487ff912c8
+# X-Yandex-Forward: 638c42cf48857d61d95cd8c944a01674
+# ----7------
+#  Katy Solo (test.katy.solo@yandex.ru)
+# To: colo18@yandex.ru,test.katy.solo@yandex.ru
+# Subject: Мое тестовое письмо
+# Content-Type: multipart/mixed; boundary = +++
+# Return-Path: test.katy.solo@yandex.ru
+# X-Yandex-Forward: 8b2a5c0e53d0aaaaa9907c487ff912c8
+# X-Yandex-Forward: 638c42cf48857d61d95cd8c944a01674
+# ----8------
+#  Katy Solo (test.katy.solo@yandex.ru)
+# To: colo18@yandex.ru,test.katy.solo@yandex.ru
+# Subject: My test letter
+# Content-Type: multipart/mixed; boundary = +++
+# Return-Path: test.katy.solo@yandex.ru
+# X-Yandex-Forward: 8b2a5c0e53d0aaaaa9907c487ff912c8
+# X-Yandex-Forward: 638c42cf48857d61d95cd8c944a01674
+# ----9------
+#  Katy Solo (test.katy.solo@yandex.ru)
+# To: colo18@yandex.ru, test.katy.solo@yandex.ru
+# Subject: My test letter
+# Return-Path: test.katy.solo@yandex.ru
+# X-Yandex-Forward: 8b2a5c0e53d0aaaaa9907c487ff912c8
+#
+# .
+# ----10------
+#  Katy Solo <test.katy.solo@yandex.ru>
+# Envelope-From: test-katy-solo@yandex.ru
+# To: test.katy.solo@yandex.ru,
+# 	colo18@yandex.ru
+# Subject: multi to field
+# MIME-Version: 1.0
+# Message-Id: <857241524649811@web50j.yandex.ru>
+# ----11------
+#  =?utf-8?b?0JrQvtC80LDQvdC00LAg0K/QvdC00LXQutGBLtCf0L7Rh9GC0Ys=?=
+# 	<hello@yandex-team.ru>
+# Subject: =?utf-8?b?0JrQsNC6INGH0LjRgtCw0YLRjCDQv9C+0YfRgtGDINGBINC80L7QsdC40Ls=?=
+#  =?utf-8?b?0YzQvdC+0LPQvg==?=
+# Message-ID: <236710bb-3652-4b96-9d0f-f30a09da9bad@robots.yandex.ru>
+#
+# --===============0057981868071609573==
+# ----12------
+#  =?utf-8?b?0K/QvdC00LXQutGB?= <hello@yandex.ru>
+# Subject: =?utf-8?b?0KHQvtCx0LXRgNC40YLQtSDQstGB0Y4g0L/QvtGH0YLRgyDQsiDRjdGC0L4=?=
+#  =?utf-8?b?0YIg0Y/RidC40Lo=?=
+# Message-Id: <20110815165837.A26162B2802A@yaback1.mail.yandex.net>
+# .
 
 def get_sender_and_subject(data):
+    # TODO normal parce
     for i in data:
-        print (i)
+        if i.lstrip().startswith('='):
+            print (i)
     return ('a','s')
 
 
