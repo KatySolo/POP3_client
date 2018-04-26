@@ -171,7 +171,6 @@ def encode_sender(data):
 
 def list_messages(socket, data_count):
     for i in range(1, data_count + 1):
-        # print ('----'+str(i)+'----')
         socket.send(("TOP " + str(i) + " 0" + '\r\n').encode())
         data = ""
         raw_data = ''
@@ -199,6 +198,42 @@ def show_inbox(socket):
     # print (data)
 
 
+def encode_letter(data):
+    date = ""
+    sender = ""
+    address = ""
+    reciever = ""
+    subject = ""
+    parts = data.split('\r\n')
+    for i in range(len(parts)):
+        if parts[i].lstrip('\t').startswith("Date"):
+            date = parts[i].lstrip('\t')
+        elif parts[i].lstrip('\t').startswith("From:"):
+            sender, address = encode_sender(parts[i,i+2])
+        elif parts[i].lstrip('\t').startswith("To :"):
+            reciever = parts[i].lstrip('\t')
+        elif parts[i].lstrip('\t').startswith("To :"):
+            subject = encode_subject(parts[i,i+2])
+        else:
+            pass
+    print (date, sender, address,reciever,subject)
+    c = 0
+    pass
+
+
+def show_letter(socket, choice):
+    socket.send(('RETR ' + choice + '\r\n').encode())
+    data = ""
+    raw_data = ''
+    while not raw_data.startswith('.'):
+        raw_data = socket.recv(1024).decode()
+        if raw_data[:2] == '-E':
+            break
+        data += raw_data
+    encode_letter(data)
+    print (data)
+
+
 if __name__ == '__main__':
     email = 'test.katy.solo@yandex.ru'
     password = 'qwertyKate98'
@@ -206,6 +241,8 @@ if __name__ == '__main__':
         socket = establlish_connection()
         auth_user(socket, ['USER ' + email, 'PASS ' + password])
         show_inbox(socket)
+        # choice = input('Enter letter number to open: ')
+        show_letter(socket, '3')
     except AuthenticationError:
         print('Wrong login/password')
     finally:
