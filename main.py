@@ -1,3 +1,4 @@
+import base64
 import socket
 import ssl
 import re
@@ -117,12 +118,57 @@ def establlish_connection():
 # Message-Id: <20110815165837.A26162B2802A@yaback1.mail.yandex.net>
 # .
 
+def encode_subject(data):
+    subject_data = ''
+    if data[0].lstrip()[9:].rstrip('"').startswith('='):
+        for i in range(len(data)):
+            if i == 0:
+                subject_data += base64.b64decode(data[i].lstrip()[9:].rstrip('\r')[10:-2]).decode('utf-8')
+            else:
+                if data[i].lstrip().startswith('='):
+                    subject_data += base64.b64decode(data[i].lstrip().rstrip('\r')[10:-2]).decode('utf-8')
+                else:
+                    break
+        return subject_data
+    else:
+        return data[0].lstrip()[9:]
+
+
 def get_sender_and_subject(data):
     # TODO normal parce
-    for i in data:
-        if i.lstrip().startswith('='):
-            print (i)
-    return ('a','s')
+    sender, address = encode_sender(data[:2])
+    subject = '<no subject>'
+    # print (address)
+    for i in range(2,len(data)):
+        if data[i].startswith('Subject:'):
+            subject += encode_subject(data[i:])
+            break
+    return (sender,address, subject)
+
+
+def encode_sender(data):
+    sender_data=''
+    if data[0].lstrip().startswith('='):
+        for i in range (2):
+            if i == 0:
+                sender_data += data[i].lstrip().rstrip('\r')
+            elif i == 1:
+                if data[i].lstrip().startswith('<'):
+                    sender_data += ' ' + data[i].lstrip()
+                else:
+                    continue
+        splitted_data = sender_data.split(' ')
+        a = splitted_data[0][10:-2]
+        email = splitted_data[1].rstrip('\r').replace('(','<').replace(')','>')
+        return (base64.b64decode(a).decode('utf-8'),email)
+    else:
+        a = data[0].lstrip().rstrip('\r').replace('(','<').replace(')','>')
+        if a.index('<') == -1:
+            return (a.split('(')[0].rstrip(),'<'+a.split('(')[1].replace(')','>'))
+        return (a.split('<')[0].rstrip(),'<'+a.split('<')[1].replace(')','>'))
+
+
+
 
 
 def list_messages(socket, data_count):
@@ -140,13 +186,12 @@ def list_messages(socket, data_count):
         while not raw_data.startswith('.') and not raw_data.startswith('\r\n'):
             raw_data = socket.recv(1024).decode()
             if raw_data[:2] == '-E':
-                print (raw_data)
+                # print (raw_data)
                 break
             data += raw_data
         from_field = data.split('\nFrom:')[1].split("\n")[:7]
-        sender, subject = get_sender_and_subject(from_field)
-        # from, subject
-        # print (sender, subject)
+        sender, address, subject = get_sender_and_subject(from_field)
+        print (sender, address, subject)
 
 def show_inbox(socket):
     socket.send(("LIST" + '\r\n').encode())
