@@ -1,6 +1,9 @@
 import base64
+import datetime
 import socket
 import ssl
+
+import re
 
 
 class AuthenticationError(Exception):
@@ -198,6 +201,37 @@ def show_inbox(socket):
     # print (data)
 
 
+def get_letter_parts(data, boundary):
+    parts = data.split('--'+boundary)
+    for i in range(1,len(parts)-1):
+        content_type = re.findall(r'Content-Type.*', parts[i])
+        if content_type[0].startswith('Content-Type: text'):
+            print (parts[i][len(content_type[0])+5:])
+        else:
+            filename = re.findall(r'name=.*', parts[i])[0]
+            code = re.findall(r'=?(.*?)?=',filename)[-1].split('?')[3]
+            name = base64.b64decode(code).decode('utf-8')
+            buffer = ''
+            img_data = ''
+            for j in range(len(parts[i])):
+                buffer += parts[i][j]
+                if buffer.endswith('\r\n\r\n'):
+                    print('puw')
+                    buffer = ''
+                    img_data = parts[i][j+1:].encode()
+                    # print (img_data)
+                    break
+
+            # img_data = parts[i][parts[i].index(r'\r\n\r\n'):]
+            with open ('attachments/'+str(datetime.datetime.now())+'_'+name, 'wb') as f:
+                f.write(base64.decodebytes(img_data))
+            print(name)
+        # print (content_type)
+
+    # print (len(parts[0]))
+    return []
+
+
 def encode_letter(data):
     date = ""
     sender = ""
@@ -214,21 +248,45 @@ def encode_letter(data):
             reciever = parts[i].lstrip('\t')
         elif parts[i].lstrip('\t').startswith("Subject:"):
             subject = encode_subject(parts[i:i+2])
-        elif not parts[i]:
-            print (''.zfill(max(len(date)+2, len(sender+address)+3, len(reciever)+2,len(subject)+11)).replace('0','-'))
-            print('| {0}\n| {1} {2}\n| {3}\n| Subject: {4}'.format(date, sender, address, reciever, subject))
-            print(''.zfill(max(len(date) + 2, len(sender + address) + 3, len(reciever) + 2, len(subject) + 11)).replace('0', '-'))
-            # print ('Found text in '+ str(i) + ' line')
-            content = ''
-            for j in range (i+1,len(parts)):
-                if not parts[j]:
-                    content += '|\n'
-                elif parts[j] != '.':
-                    content += '| '+parts[j]+'\n'
-            print (content)
-            break
+        elif parts[i].lstrip('\t').startswith("Content-Type:"):
+            boundary = re.findall(r'boundary.*', parts[i])
+            if len(boundary) != 0:
+                boundary_value = boundary[0].split('=')[1].lstrip().rstrip()
+                # print (boundary_value)
+                print_header(address, date, reciever, sender, subject)
+                content_parts = get_letter_parts(data, boundary_value)
+                break
+            print_formatted_letter(address, date, i, parts, reciever, sender, subject)
+        else:
+            pass
+
+            # get boundary and process each part in multipart
+        # 'Content-Type: multipart/mixed; boundary =6417766050356464863'
+        # elif not parts[i]:
+
+        #     break
 
     pass
+
+
+def print_formatted_letter(address, date, i, parts, reciever, sender, subject):
+    print_header(address, date, reciever, sender, subject)
+    # print ('Found text in '+ str(i) + ' line')
+    content = ''
+    for j in range(i + 1, len(parts)):
+        if not parts[j]:
+            content += '|\n'
+        elif parts[j] != '.':
+            content += '| ' + parts[j] + '\n'
+    print(content)
+
+
+def print_header(address, date, reciever, sender, subject):
+    print(
+        ''.zfill(max(len(date) + 2, len(sender + address) + 3, len(reciever) + 2, len(subject) + 11)).replace('0', '-'))
+    print('| {0}\n| {1} {2}\n| {3}\n| Subject: {4}'.format(date, sender, address, reciever, subject))
+    print(
+        ''.zfill(max(len(date) + 2, len(sender + address) + 3, len(reciever) + 2, len(subject) + 11)).replace('0', '-'))
 
 
 def show_letter(socket, choice):
