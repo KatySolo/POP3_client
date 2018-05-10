@@ -216,7 +216,7 @@ def get_letter_parts(data, boundary):
             for j in range(len(parts[i])):
                 buffer += parts[i][j]
                 if buffer.endswith('\r\n\r\n'):
-                    print('puw')
+                    # print('puw')
                     buffer = ''
                     img_data = parts[i][j+1:].encode()
                     # print (img_data)
