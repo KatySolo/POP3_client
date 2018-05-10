@@ -254,9 +254,10 @@ def encode_letter(data):
                 boundary_value = boundary[0].split('=')[1].lstrip().rstrip()
                 # print (boundary_value)
                 print_header(address, date, reciever, sender, subject)
-                content_parts = get_letter_parts(data, boundary_value)
+                get_letter_parts(data, boundary_value)
                 break
-            print_formatted_letter(address, date, i, parts, reciever, sender, subject)
+            else:
+                print_formatted_letter(address, date, i, parts, reciever, sender, subject)
         else:
             pass
 
@@ -273,7 +274,7 @@ def print_formatted_letter(address, date, i, parts, reciever, sender, subject):
     print_header(address, date, reciever, sender, subject)
     # print ('Found text in '+ str(i) + ' line')
     content = ''
-    for j in range(i + 1, len(parts)):
+    for j in range(i + 5, len(parts)):
         if not parts[j]:
             content += '|\n'
         elif parts[j] != '.':
